@@ -1,13 +1,18 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 
 export default class BaseDomain {
-  @PrimaryGeneratedColumn()
-  id!: string;
-  @Column()
+  @PrimaryGeneratedColumn("uuid")
+  id?: string;
+  @CreateDateColumn()
   createdAt?: Date;
-  @Column()
+  @UpdateDateColumn()
   updatedAt?: Date;
-  @Column()
+  @DeleteDateColumn()
   deletedAt?: Date;
 
   constructor(baseDomain: BaseDomain) {
