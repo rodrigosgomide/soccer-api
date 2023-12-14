@@ -1,16 +1,23 @@
-import Team from "src/domain/Team";
 import { DataSource } from "typeorm";
 
-export const AppDataSource = new DataSource({
+export const dataSource = new DataSource({
   type: "mysql",
-  host: "localhost",
-  port: 5432,
-  username: "test",
-  password: "test",
-  database: "test",
-  synchronize: true,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT as unknown as number,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  synchronize: false,
   logging: true,
-  entities: [Team],
-  subscribers: [],
-  migrations: [],
+  migrationsRun: false,
+  entities: ["/src/domain/*.ts"],
+  migrations: ["src/infra/database/migration/**/*.js"],
 });
+
+export async function makeConnection() {
+  const connection = await dataSource
+    .initialize()
+    .then((dataSource: DataSource) => dataSource);
+
+  return connection;
+}
