@@ -3,7 +3,8 @@ import express from "express";
 require("dotenv").config();
 
 import { Router, Request, Response } from "express";
-import { makeConnection } from "./infra/database/config/Connection";
+import Connection from "./infra/database/config/TypeOrmConnection";
+import CreateSeason from "./aplication/CreateSeason";
 
 const app = express();
 
@@ -15,10 +16,11 @@ route.get("/", (req: Request, res: Response) => {
   res.json({ message: "hello world with Typescript2" });
 });
 
+route.post("/season");
+
 app.use(route);
 
 app.listen(3002, () => "server running on port 3002");
 
-makeConnection().then((connection) =>
-  console.log(connection.isInitialized && "connected")
-);
+const connection = new Connection();
+connection.makeConnection();
